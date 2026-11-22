@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+@theme {
+  --color-burgundy: #6D1025;
+  --color-burgundy-deep: #490D20;
+  --color-wine: #310916;
+  --color-rose-romantic: #B52B45;
+  --color-blush: #F7DDE2;
+  --color-soft-pink: #FCECEF;
+  --color-cream: #FFF8F2;
+  --color-ivory: #F5EEE8;
+  --color-gold: #C6A36A;
+
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-editorial: "Playfair Display", Georgia, serif;
+  --font-sans: "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-script: "Great Vibes", cursive;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    overflow-x: clip;
+    background-color: #490D20;
+    color: #310916;
+    font-family: var(--font-sans);
+  }
+
+  body {
+    overflow-x: clip;
+    background-color: #FFF8F2;
+    color: #310916;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+}
+
+/* Visible paper grain & fine textile surface treatments */
+.surface-cream-paper {
+  background-color: #FFF8F2;
+  background-image:
+    radial-gradient(ellipse 90% 60% at 50% 0%, rgba(247, 221, 226, 0.34), transparent 70%),
+    radial-gradient(circle at 15% 85%, rgba(198, 163, 106, 0.1), transparent 55%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.42 0 0 0 0 0.18 0 0 0 0 0.22 0 0 0 0.055 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperGrain)'/%3E%3C/svg%3E");
+}
+
+.surface-ivory-album {
+  background-color: #F5EEE8;
+  background-image:
+    radial-gradient(ellipse 85% 50% at 50% 10%, rgba(255, 248, 242, 0.7), transparent 68%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='ivoryGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.76' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.35 0 0 0 0 0.15 0 0 0 0 0.18 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23ivoryGrain)'/%3E%3C/svg%3E");
+}
+
+.surface-burgundy-linen {
+  background-color: #490D20;
+  background-image:
+    radial-gradient(ellipse 80% 55% at 50% 12%, rgba(181, 43, 69, 0.24), transparent 65%),
+    radial-gradient(ellipse 90% 60% at 50% 100%, rgba(49, 9, 22, 0.9), transparent 70%),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 248, 242, 0.024) 0px,
+      rgba(255, 248, 242, 0.024) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(198, 163, 106, 0.022) 0px,
+      rgba(198, 163, 106, 0.022) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='linenNoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 0.94 0 0 0 0 0.92 0 0 0 0.055 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23linenNoise)'/%3E%3C/svg%3E");
+}
+
+.surface-blush-silk {
+  background-color: #FCECEF;
+  background-image:
+    radial-gradient(ellipse 85% 55% at 50% 0%, rgba(247, 221, 226, 0.9), transparent 72%),
+    radial-gradient(circle at 85% 85%, rgba(181, 43, 69, 0.08), transparent 55%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='blushGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.43 0 0 0 0 0.06 0 0 0 0 0.15 0 0 0 0.045 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23blushGrain)'/%3E%3C/svg%3E");
+}
+
+.film-grain-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='film'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23film)' opacity='0.22'/%3E%3C/svg%3E");
+}
+
+.editorial-frame-shadow {
+  box-shadow:
+    0 14px 34px -14px rgba(49, 9, 22, 0.16),
+    0 4px 12px -4px rgba(49, 9, 22, 0.08);
+}
+
+.editorial-frame-shadow-dark {
+  box-shadow:
+    0 18px 42px -14px rgba(18, 2, 7, 0.65),
+    0 4px 16px -4px rgba(18, 2, 7, 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
