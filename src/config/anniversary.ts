@@ -38,8 +38,8 @@ export interface AnniversaryLetterData {
   signature: string;
 }
 
-export const TOTAL_PHOTOS = 26;
-export const TOTAL_VIDEOS = 4;
+export const TOTAL_PHOTOS = 29;
+export const TOTAL_VIDEOS = 6;
 export const HERO_PHOTO_ID = 26;
 
 export const COUPLE_INFO = {
@@ -91,6 +91,9 @@ const DEFAULT_PHOTO_CAPTIONS: Record<number, { caption: string; subcaption?: str
   24: { caption: 'All the warmth of our first three hundred and sixty-five days.' },
   25: { caption: 'Here is to every frame still waiting for us.' },
   26: { caption: 'Our cover frame — one year of us, forever to go.' },
+  27: { caption: 'Another quiet moment we will always carry with us.' },
+  28: { caption: 'Still finding new favourites in every glance.' },
+  29: { caption: 'Ending our first year just as warmly as it began.' },
 };
 
 export const PHOTO_MEMORIES: PhotoMemory[] = Array.from(
@@ -151,11 +154,11 @@ export const STORY_CHAPTERS: StoryChapter[] = [
 export const GALLERY_SECTION_HEADER = {
   heading: 'A Thousand Memories, One Beautiful Story',
   subheading:
-    'Twenty-five framed moments from our first year, preserved intact without losing a single detail.',
+    'Framed moments from our first year, preserved intact without losing a single detail.',
 };
 
 export const GALLERY_PHOTO_IDS = PHOTO_MEMORIES.filter(
-  (photo) => photo.id > 4 && photo.id < HERO_PHOTO_ID,
+  (photo) => photo.id > 4 && photo.id !== HERO_PHOTO_ID,
 ).map((photo) => photo.id);
 
 export const VIDEO_SECTION_HEADER = {
@@ -180,6 +183,14 @@ const DEFAULT_VIDEO_META: Record<number, { title: string; caption: string }> = {
   4: {
     title: 'In Motion — Reel IV',
     caption: 'Our first year, playing back in warmth.',
+  },
+  5: {
+    title: 'In Motion — Reel V',
+    caption: 'Little expressions worth replaying forever.',
+  },
+  6: {
+    title: 'In Motion — Reel VI',
+    caption: 'Quiet joy, preserved just as it happened.',
   },
 };
 

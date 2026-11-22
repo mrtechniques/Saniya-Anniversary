@@ -2,5 +2,7 @@
   "name": "A Year of Us — Arshad & Saniya",
   "description": "A luxury editorial first wedding anniversary digital keepsake and love letter from Saniya to Arshad celebrating 23 November 2025 to 23 November 2026.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

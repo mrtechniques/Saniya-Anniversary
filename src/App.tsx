@@ -1,15 +1,9 @@
 import { useState } from 'react';
 import { MotionConfig } from 'motion/react';
 import {
-  clearStoredLetter,
-  clearStoredNotes,
-  loadStoredLetter,
-  loadStoredNotes,
+  DEFAULT_LETTER,
+  DEFAULT_LOVE_NOTES,
   PHOTO_MEMORIES,
-  saveStoredLetter,
-  saveStoredNotes,
-  type AnniversaryLetterData,
-  type LoveNote,
 } from './config/anniversary';
 import { ScrollProgress } from './components/ScrollProgress';
 import { LoadingScreen } from './components/LoadingScreen';
@@ -26,30 +20,6 @@ export default function App() {
   const [activeLightboxPhotoId, setActiveLightboxPhotoId] = useState<number | null>(
     null,
   );
-  const [letter, setLetter] = useState<AnniversaryLetterData>(() =>
-    loadStoredLetter(),
-  );
-  const [notes, setNotes] = useState<LoveNote[]>(() => loadStoredNotes());
-
-  const handleSaveLetter = (updated: AnniversaryLetterData) => {
-    setLetter(updated);
-    saveStoredLetter(updated);
-  };
-
-  const handleResetLetter = () => {
-    clearStoredLetter();
-    setLetter(loadStoredLetter());
-  };
-
-  const handleSaveNotes = (updated: LoveNote[]) => {
-    setNotes(updated);
-    saveStoredNotes(updated);
-  };
-
-  const handleResetNotes = () => {
-    clearStoredNotes();
-    setNotes(loadStoredNotes());
-  };
 
   return (
     <MotionConfig reducedMotion="user">
@@ -62,16 +32,8 @@ export default function App() {
           <StorySection onSelectPhoto={setActiveLightboxPhotoId} />
           <PhotoGallery onSelectPhoto={setActiveLightboxPhotoId} />
           <VideoGallery />
-          <LoveNotes
-            notes={notes}
-            onSaveNotes={handleSaveNotes}
-            onResetNotes={handleResetNotes}
-          />
-          <AnniversaryLetter
-            letter={letter}
-            onSaveLetter={handleSaveLetter}
-            onResetLetter={handleResetLetter}
-          />
+          <LoveNotes notes={DEFAULT_LOVE_NOTES} />
+          <AnniversaryLetter letter={DEFAULT_LETTER} />
         </main>
 
         <FinalMessage />

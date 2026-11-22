@@ -47,7 +47,7 @@ export function PhotoGallery({ onSelectPhoto }: PhotoGalleryProps) {
           className="text-center max-w-2xl mx-auto mb-14 sm:mb-20"
         >
           <p className="text-[11px] sm:text-xs tracking-[0.28em] uppercase text-[#6D1025]/75 mb-3">
-            Our Memories · Plates 05 – 25
+            Our Memories · {galleryPhotos.length} Album Plates
           </p>
           <h2
             id="our-memories-heading"
