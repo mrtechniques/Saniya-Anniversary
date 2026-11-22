@@ -88,6 +88,28 @@ src/config/anniversary.ts
 
 ---
 
+## Deploying to Vercel
+
+This project includes a preconfigured `vercel.json` for Vite static hosting, media caching, and SPA routing.
+
+### Option 1: Deploy via Vercel Dashboard (Git)
+
+1. Ensure your photos (`1.jpeg`–`29.jpeg`) and videos (`1.mp4`–`6.mp4`) are placed in `public/memories/photos/` and `public/memories/videos/` and committed to your repository.
+2. Push your repository to GitHub, GitLab, or Bitbucket.
+3. Import the project in [Vercel](https://vercel.com/new) — Vercel will automatically detect **Vite** (`npm run build` → `dist`).
+4. Click **Deploy**.
+
+### Option 2: Deploy via Vercel CLI
+
+```bash
+npm install -g vercel
+vercel --prod
+```
+
+> **Note**: No environment variables or backend databases are required for deployment.
+
+---
+
 ## Tech Stack
 
 - **React 19** + **TypeScript**
