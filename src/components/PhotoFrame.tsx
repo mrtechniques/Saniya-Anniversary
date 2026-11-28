@@ -61,9 +61,8 @@ export function PhotoFrame({
   return (
     <figure className={`group w-full ${className}`}>
       <div
-        className={`relative bg-[#FFF8F2] border border-[#C6A36A]/28 rounded-[10px] ${framePadding} editorial-frame-shadow transition-transform duration-300 ${
-          isInteractive ? 'group-hover:-translate-y-0.5' : ''
-        }`}
+        className={`relative bg-[#FFF8F2] border border-[#C6A36A]/28 rounded-[10px] ${framePadding} editorial-frame-shadow transition-transform duration-300 ${isInteractive ? 'group-hover:-translate-y-0.5' : ''
+          }`}
       >
         <div
           className="relative w-full overflow-hidden rounded-[6px] bg-[#F5EEE8] border border-[#6D1025]/10"
@@ -79,11 +78,9 @@ export function PhotoFrame({
               onLoad={handleImageLoad}
               onError={handleImageError}
               style={imageStyle}
-              className={`h-full w-full ${
-                isRepositioned ? 'object-cover' : 'object-contain'
-              } transition-opacity duration-500 ${
-                status === 'loaded' ? 'opacity-100' : 'opacity-0'
-              }`}
+              className={`h-full w-full ${isRepositioned ? 'object-cover' : 'object-contain'
+                } transition-opacity duration-500 ${status === 'loaded' ? 'opacity-100' : 'opacity-0'
+                }`}
             />
           )}
 
