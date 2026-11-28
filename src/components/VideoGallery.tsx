@@ -1,15 +1,43 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { VIDEO_MEMORIES, VIDEO_SECTION_HEADER } from '../config/anniversary';
+import {
+  DEFAULT_WEBSITE_CONFIG,
+  isValidMediaPath,
+  resolveTemplateText,
+  type WebsiteConfig,
+} from '../config/anniversary';
 import { VideoFrame } from './VideoFrame';
 
-export function VideoGallery() {
-  // Ensures at most one video plays audio at any moment
+interface VideoGalleryProps {
+  config?: WebsiteConfig;
+}
+
+export function VideoGallery({ config = DEFAULT_WEBSITE_CONFIG }: VideoGalleryProps) {
   const [activeAudioVideoId, setActiveAudioVideoId] = useState<number | null>(null);
+
+  const visibleVideos = config.videos
+    .filter((v) => v.visible && isValidMediaPath(v.src))
+    .map((v) => ({
+      ...v,
+      title: resolveTemplateText(v.title, config),
+      caption: resolveTemplateText(v.caption, config),
+    }));
+
+  // Zero videos: hide the entire section cleanly with no empty frames or spacing
+  if (visibleVideos.length === 0) {
+    return null;
+  }
 
   const handleToggleAudio = (videoId: number) => {
     setActiveAudioVideoId((prev) => (prev === videoId ? null : videoId));
   };
+
+  const heading = resolveTemplateText(config.videoHeader.heading, config);
+  const subheading = resolveTemplateText(config.videoHeader.subheading, config);
+  const helperNote = resolveTemplateText(
+    config.videoHeader.helperNote ?? 'Tap any reel to listen',
+    config,
+  );
 
   return (
     <section
@@ -26,16 +54,16 @@ export function VideoGallery() {
           className="text-center max-w-xl mx-auto mb-12 sm:mb-18"
         >
           <p className="text-[11px] sm:text-xs tracking-[0.28em] uppercase text-[#C6A36A] mb-3">
-            In Motion · {VIDEO_SECTION_HEADER.helperNote}
+            In Motion · {helperNote}
           </p>
           <h2
             id="motion-heading"
             className="font-[family-name:var(--font-editorial)] font-normal text-[clamp(2rem,5.5vw,3.2rem)] leading-[1.12] text-[#FFF8F2] mb-4"
           >
-            {VIDEO_SECTION_HEADER.heading}
+            {heading}
           </h2>
           <p className="font-[family-name:var(--font-display)] italic text-lg sm:text-xl text-[#F7DDE2]/90">
-            {VIDEO_SECTION_HEADER.subheading}
+            {subheading}
           </p>
           <div
             aria-hidden="true"
@@ -47,9 +75,8 @@ export function VideoGallery() {
           </div>
         </motion.header>
 
-        {/* Balanced 1-column mobile / 2-column desktop editorial video grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 items-start">
-          {VIDEO_MEMORIES.map((video, index) => (
+          {visibleVideos.map((video, index) => (
             <motion.div
               key={video.id}
               initial={{ opacity: 0, y: 20 }}

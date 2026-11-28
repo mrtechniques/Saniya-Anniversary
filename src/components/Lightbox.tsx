@@ -6,6 +6,7 @@ import type { PhotoMemory } from '../config/anniversary';
 interface LightboxProps {
   photos: PhotoMemory[];
   activePhotoId: number | null;
+  coupleInitials?: string;
   onClose: () => void;
   onChangePhoto: (photoId: number) => void;
 }
@@ -13,6 +14,7 @@ interface LightboxProps {
 export function Lightbox({
   photos,
   activePhotoId,
+  coupleInitials = 'A & S',
   onClose,
   onChangePhoto,
 }: LightboxProps) {
@@ -100,7 +102,6 @@ export function Lightbox({
           onTouchEnd={handleTouchEnd}
           className="fixed inset-0 z-[110] flex flex-col justify-between bg-[#1F050D]/96 backdrop-blur-md text-[#FFF8F2] p-4 sm:p-6"
         >
-          {/* Top header bar */}
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2.5 text-xs tracking-[0.22em] uppercase text-[#F7DDE2]/85 tabular-nums">
               <span>{activePhoto.plateLabel}</span>
@@ -122,7 +123,6 @@ export function Lightbox({
             </button>
           </div>
 
-          {/* Center photograph area (preserves original proportions cleanly) */}
           <div
             onClick={onClose}
             className="relative flex-1 flex items-center justify-center my-3 sm:my-5 overflow-hidden"
@@ -153,13 +153,13 @@ export function Lightbox({
                   <div className="w-[min(84vw,420px)] aspect-[4/5] p-3 bg-[#FFF8F2] rounded-[8px] shadow-2xl">
                     <div className="h-full w-full surface-ivory-album border border-[#C6A36A]/35 rounded-[4px] flex flex-col items-center justify-center p-6 text-center">
                       <span className="font-[family-name:var(--font-display)] italic text-2xl text-[#6D1025]/75 mb-2">
-                        A &amp; S
+                        {coupleInitials}
                       </span>
                       <span className="text-xs tracking-[0.26em] uppercase text-[#490D20] tabular-nums">
                         {activePhoto.plateLabel}
                       </span>
                       <span className="mt-3 text-xs text-[#490D20]/60">
-                        Add {activePhoto.id}.jpeg to public/memories/photos/
+                        {activePhoto.src}
                       </span>
                     </div>
                   </div>
@@ -168,7 +168,6 @@ export function Lightbox({
             </AnimatePresence>
           </div>
 
-          {/* Bottom caption & swipe/arrow controls */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 max-w-4xl w-full mx-auto pb-1">
             <p className="font-[family-name:var(--font-display)] text-base sm:text-lg text-[#FFF8F2]/95 text-center sm:text-left">
               {activePhoto.caption}

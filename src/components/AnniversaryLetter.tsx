@@ -1,14 +1,33 @@
 import { motion } from 'motion/react';
 import {
-  COUPLE_INFO,
+  DEFAULT_WEBSITE_CONFIG,
+  getEffectiveAnniversaryNumber,
+  resolveTemplateText,
   type AnniversaryLetterData,
+  type WebsiteConfig,
 } from '../config/anniversary';
+import { formatReadableDate, getAnniversaryDateISO } from '../config/dateUtils';
 
 interface AnniversaryLetterProps {
-  letter: AnniversaryLetterData;
+  letter?: AnniversaryLetterData;
+  config?: WebsiteConfig;
 }
 
-export function AnniversaryLetter({ letter }: AnniversaryLetterProps) {
+export function AnniversaryLetter({
+  letter,
+  config = DEFAULT_WEBSITE_CONFIG,
+}: AnniversaryLetterProps) {
+  const sourceLetter = letter ?? config.letter;
+  const annNum = getEffectiveAnniversaryNumber(config.couple);
+  const anniversaryDateReadable = formatReadableDate(
+    getAnniversaryDateISO(config.couple.weddingDate, annNum),
+  );
+
+  const heading = resolveTemplateText(sourceLetter.heading, config);
+  const salutation = resolveTemplateText(sourceLetter.salutation, config);
+  const closing = resolveTemplateText(sourceLetter.closing, config);
+  const signature = resolveTemplateText(sourceLetter.signature, config);
+
   return (
     <section
       id="letter"
@@ -30,11 +49,10 @@ export function AnniversaryLetter({ letter }: AnniversaryLetterProps) {
             id="letter-heading"
             className="font-[family-name:var(--font-editorial)] font-normal text-[clamp(2rem,5.5vw,3.1rem)] leading-[1.12] text-[#310916]"
           >
-            {letter.heading}
+            {heading}
           </h2>
         </motion.header>
 
-        {/* Stationery letter frame */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -43,7 +61,6 @@ export function AnniversaryLetter({ letter }: AnniversaryLetterProps) {
           className="relative bg-[#FFF8F2] border border-[#C6A36A]/45 rounded-[12px] p-4 sm:p-7 editorial-frame-shadow"
         >
           <div className="relative border border-[#6D1025]/14 rounded-[8px] px-5 py-8 sm:px-10 sm:py-12 md:px-14 md:py-14 surface-cream-paper">
-            {/* Ornamental corner marks */}
             <span
               aria-hidden="true"
               className="absolute top-3.5 left-3.5 h-3.5 w-3.5 border-t border-l border-[#C6A36A]/70"
@@ -63,25 +80,25 @@ export function AnniversaryLetter({ letter }: AnniversaryLetterProps) {
 
             <div className="max-w-xl mx-auto">
               <p className="text-[11px] tracking-[0.26em] uppercase text-[#6D1025]/65 mb-7 tabular-nums">
-                {COUPLE_INFO.firstAnniversaryDate}
+                {anniversaryDateReadable}
               </p>
 
               <p className="font-[family-name:var(--font-display)] italic text-2xl sm:text-[1.7rem] text-[#490D20] mb-6">
-                {letter.salutation}
+                {salutation}
               </p>
 
               <div className="space-y-5 text-[15.5px] sm:text-[16.5px] leading-[1.82] text-[#310916]/90">
-                {letter.paragraphs.map((paragraph, index) => (
-                  <p key={index}>{paragraph}</p>
+                {sourceLetter.paragraphs.map((paragraph, index) => (
+                  <p key={index}>{resolveTemplateText(paragraph, config)}</p>
                 ))}
               </div>
 
               <div className="mt-9 pt-6 border-t border-[#C6A36A]/25">
                 <p className="font-[family-name:var(--font-display)] italic text-lg text-[#490D20] mb-1">
-                  {letter.closing}
+                  {closing}
                 </p>
                 <p className="font-[family-name:var(--font-script)] text-[2.25rem] sm:text-[2.6rem] leading-tight text-[#6D1025]">
-                  {letter.signature}
+                  {signature}
                 </p>
               </div>
             </div>

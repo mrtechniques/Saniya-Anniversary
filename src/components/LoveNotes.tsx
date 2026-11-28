@@ -1,14 +1,27 @@
 import { motion } from 'motion/react';
 import {
-  LOVE_NOTES_HEADER,
+  DEFAULT_WEBSITE_CONFIG,
+  resolveTemplateText,
   type LoveNote,
+  type WebsiteConfig,
 } from '../config/anniversary';
 
 interface LoveNotesProps {
-  notes: LoveNote[];
+  notes?: LoveNote[];
+  config?: WebsiteConfig;
 }
 
-export function LoveNotes({ notes }: LoveNotesProps) {
+export function LoveNotes({ notes, config = DEFAULT_WEBSITE_CONFIG }: LoveNotesProps) {
+  const sourceNotes = notes ?? config.loveNotes;
+  if (sourceNotes.length === 0) return null;
+
+  const eyebrow = resolveTemplateText(
+    config.loveNotesHeader.eyebrow ?? 'Notes of Affection',
+    config,
+  );
+  const heading = resolveTemplateText(config.loveNotesHeader.heading, config);
+  const subheading = resolveTemplateText(config.loveNotesHeader.subheading, config);
+
   return (
     <section
       id="little-things"
@@ -24,21 +37,21 @@ export function LoveNotes({ notes }: LoveNotesProps) {
           className="text-center max-w-xl mx-auto mb-12 sm:mb-16"
         >
           <p className="text-[11px] sm:text-xs tracking-[0.28em] uppercase text-[#6D1025]/75 mb-3">
-            Notes of Affection
+            {eyebrow}
           </p>
           <h2
             id="little-things-heading"
             className="font-[family-name:var(--font-editorial)] font-normal text-[clamp(2rem,5.5vw,3.15rem)] leading-[1.12] text-[#310916] mb-3.5"
           >
-            {LOVE_NOTES_HEADER.heading}
+            {heading}
           </h2>
           <p className="font-[family-name:var(--font-display)] italic text-lg sm:text-xl text-[#6D1025]/90">
-            {LOVE_NOTES_HEADER.subheading}
+            {subheading}
           </p>
         </motion.header>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
-          {notes.map((note, index) => (
+          {sourceNotes.map((note, index) => (
             <motion.article
               key={note.id}
               initial={{ opacity: 0, y: 16 }}
@@ -53,14 +66,14 @@ export function LoveNotes({ notes }: LoveNotesProps) {
             >
               <div className="flex items-baseline justify-between gap-4 mb-2">
                 <h3 className="font-[family-name:var(--font-display)] font-medium text-2xl text-[#490D20]">
-                  {note.title}
+                  {resolveTemplateText(note.title, config)}
                 </h3>
                 <span className="text-[11px] tracking-[0.24em] text-[#B52B45]/80 tabular-nums shrink-0">
                   {String(index + 1).padStart(2, '0')}
                 </span>
               </div>
               <p className="text-[15px] sm:text-base leading-[1.7] text-[#310916]/85">
-                {note.description}
+                {resolveTemplateText(note.description, config)}
               </p>
             </motion.article>
           ))}

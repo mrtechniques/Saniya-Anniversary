@@ -1,13 +1,16 @@
 import { motion } from 'motion/react';
 import {
-  GALLERY_PHOTO_IDS,
-  GALLERY_SECTION_HEADER,
-  PHOTO_MEMORIES,
+  DEFAULT_WEBSITE_CONFIG,
+  getCoupleInitials,
+  isValidMediaPath,
+  resolveTemplateText,
   type PhotoMemory,
+  type WebsiteConfig,
 } from '../config/anniversary';
 import { PhotoFrame } from './PhotoFrame';
 
 interface PhotoGalleryProps {
+  config?: WebsiteConfig;
   onSelectPhoto: (photoId: number) => void;
 }
 
@@ -16,13 +19,26 @@ interface EditorialSpread {
   pair: PhotoMemory[];
 }
 
-export function PhotoGallery({ onSelectPhoto }: PhotoGalleryProps) {
-  const galleryPhotos = GALLERY_PHOTO_IDS.map((id) =>
-    PHOTO_MEMORIES.find((p) => p.id === id),
-  ).filter((p): p is PhotoMemory => Boolean(p));
+export function PhotoGallery({
+  config = DEFAULT_WEBSITE_CONFIG,
+  onSelectPhoto,
+}: PhotoGalleryProps) {
+  const galleryPhotos = config.photos
+    .filter((p) => p.visible && isValidMediaPath(p.src))
+    .map((p) => ({
+      ...p,
+      caption: resolveTemplateText(p.caption, config),
+      subcaption: p.subcaption ? resolveTemplateText(p.subcaption, config) : undefined,
+    }));
 
-  // Group gallery photos into deliberate editorial spreads:
-  // 1 feature photograph followed by a balanced 2-column photo pair
+  if (galleryPhotos.length === 0) {
+    return null;
+  }
+
+  const coupleInitials = getCoupleInitials(config.couple);
+  const heading = resolveTemplateText(config.galleryHeader.heading, config);
+  const subheading = resolveTemplateText(config.galleryHeader.subheading, config);
+
   const spreads: EditorialSpread[] = [];
   for (let i = 0; i < galleryPhotos.length; i += 3) {
     spreads.push({
@@ -38,7 +54,6 @@ export function PhotoGallery({ onSelectPhoto }: PhotoGalleryProps) {
       className="relative surface-ivory-album py-16 sm:py-24 lg:py-28 px-5 sm:px-8 border-t border-[#C6A36A]/25"
     >
       <div className="max-w-5xl mx-auto">
-        {/* Album header */}
         <motion.header
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -53,10 +68,10 @@ export function PhotoGallery({ onSelectPhoto }: PhotoGalleryProps) {
             id="our-memories-heading"
             className="font-[family-name:var(--font-editorial)] font-normal text-[clamp(2rem,5.5vw,3.2rem)] leading-[1.12] text-[#310916] mb-4"
           >
-            {GALLERY_SECTION_HEADER.heading}
+            {heading}
           </h2>
           <p className="text-[15px] sm:text-base leading-relaxed text-[#490D20]/80 max-w-lg mx-auto">
-            {GALLERY_SECTION_HEADER.subheading}
+            {subheading}
           </p>
           <div
             aria-hidden="true"
@@ -68,11 +83,9 @@ export function PhotoGallery({ onSelectPhoto }: PhotoGalleryProps) {
           </div>
         </motion.header>
 
-        {/* Editorial spreads */}
         <div className="space-y-14 sm:space-y-20">
           {spreads.map((spread, spreadIndex) => (
             <div key={spread.feature.id} className="space-y-10 sm:space-y-14">
-              {/* Feature photograph */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -83,11 +96,11 @@ export function PhotoGallery({ onSelectPhoto }: PhotoGalleryProps) {
                 <PhotoFrame
                   photo={spread.feature}
                   variant="feature"
+                  coupleInitials={coupleInitials}
                   onSelect={onSelectPhoto}
                 />
               </motion.div>
 
-              {/* Balanced two-column pair */}
               {spread.pair.length > 0 && (
                 <div
                   className={`grid grid-cols-1 ${
@@ -109,6 +122,7 @@ export function PhotoGallery({ onSelectPhoto }: PhotoGalleryProps) {
                       <PhotoFrame
                         photo={photo}
                         variant="default"
+                        coupleInitials={coupleInitials}
                         onSelect={onSelectPhoto}
                       />
                     </motion.div>
@@ -116,7 +130,6 @@ export function PhotoGallery({ onSelectPhoto }: PhotoGalleryProps) {
                 </div>
               )}
 
-              {/* Subtle ornamental separator between spreads */}
               {spreadIndex < spreads.length - 1 && (
                 <div
                   aria-hidden="true"

@@ -1,14 +1,40 @@
 import { motion } from 'motion/react';
-import { COUPLE_INFO, FINAL_MESSAGE_CONTENT } from '../config/anniversary';
+import {
+  DEFAULT_WEBSITE_CONFIG,
+  getEffectiveAnniversaryNumber,
+  resolveTemplateText,
+  type WebsiteConfig,
+} from '../config/anniversary';
+import { formatReadableDate, getAnniversaryDateISO } from '../config/dateUtils';
 
-export function FinalMessage() {
+interface FinalMessageProps {
+  config?: WebsiteConfig;
+}
+
+export function FinalMessage({ config = DEFAULT_WEBSITE_CONFIG }: FinalMessageProps) {
+  const annNum = getEffectiveAnniversaryNumber(config.couple);
+  const weddingReadable = formatReadableDate(config.couple.weddingDate);
+  const anniversaryReadable = formatReadableDate(
+    getAnniversaryDateISO(config.couple.weddingDate, annNum),
+  );
+  const dateRange = `${weddingReadable} — ${anniversaryReadable}`;
+  const coupleDisplay = resolveTemplateText(config.hero.coupleDisplay, config);
+
+  const lead = resolveTemplateText(config.finalMessage.lead, config);
+  const animatedLine = resolveTemplateText(config.finalMessage.animatedLine, config);
+  const anniversaryGreeting = resolveTemplateText(
+    config.finalMessage.anniversaryGreeting,
+    config,
+  );
+  const signOff = resolveTemplateText(config.finalMessage.signOff, config);
+  const closingNote = resolveTemplateText(config.finalMessage.closingNote, config);
+
   return (
     <footer
       id="forever"
       aria-label="Anniversary closing dedication"
       className="relative surface-burgundy-linen text-[#FFF8F2] py-24 sm:py-32 px-5 sm:px-8 border-t border-[#C6A36A]/25 overflow-hidden"
     >
-      {/* Subtle central radial glow */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(181,43,69,0.22),transparent_62%)]"
@@ -22,7 +48,7 @@ export function FinalMessage() {
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="font-[family-name:var(--font-display)] italic text-2xl sm:text-3xl text-[#F7DDE2] mb-3"
         >
-          {FINAL_MESSAGE_CONTENT.lead}
+          {lead}
         </motion.p>
 
         <motion.h2
@@ -32,7 +58,7 @@ export function FinalMessage() {
           transition={{ duration: 0.85, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
           className="font-[family-name:var(--font-editorial)] font-normal text-[clamp(2.35rem,7.5vw,4.15rem)] leading-[1.08] text-[#FFF8F2] mb-8"
         >
-          {FINAL_MESSAGE_CONTENT.animatedLine}
+          {animatedLine}
         </motion.h2>
 
         <motion.div
@@ -43,17 +69,16 @@ export function FinalMessage() {
           className="space-y-2.5 mb-10"
         >
           <p className="font-[family-name:var(--font-display)] text-xl sm:text-2xl text-[#FFF8F2]/95">
-            {FINAL_MESSAGE_CONTENT.anniversaryGreeting}
+            {anniversaryGreeting}
           </p>
           <p className="font-[family-name:var(--font-script)] text-[2rem] sm:text-[2.35rem] text-[#F7DDE2]">
-            {FINAL_MESSAGE_CONTENT.signOff}
+            {signOff}
           </p>
           <p className="text-sm sm:text-[15px] text-[#F7DDE2]/80 pt-1">
-            {FINAL_MESSAGE_CONTENT.closingNote}
+            {closingNote}
           </p>
         </motion.div>
 
-        {/* Final restrained animated heart */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -79,7 +104,7 @@ export function FinalMessage() {
           </motion.div>
 
           <p className="text-[11px] tracking-[0.26em] uppercase text-[#C6A36A]/85 tabular-nums">
-            {COUPLE_INFO.coupleDisplay} · {FINAL_MESSAGE_CONTENT.dateRange}
+            {coupleDisplay} · {dateRange}
           </p>
         </motion.div>
       </div>

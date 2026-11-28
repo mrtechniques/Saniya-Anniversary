@@ -6,6 +6,7 @@ interface StoryCompositionProps {
   chapter: StoryChapter;
   photo: PhotoMemory;
   reverse?: boolean;
+  coupleInitials?: string;
   onSelectPhoto?: (photoId: number) => void;
 }
 
@@ -13,6 +14,7 @@ export function StoryComposition({
   chapter,
   photo,
   reverse = false,
+  coupleInitials = 'A & S',
   onSelectPhoto,
 }: StoryCompositionProps) {
   return (
@@ -23,25 +25,22 @@ export function StoryComposition({
       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
       className="grid grid-cols-1 md:grid-cols-12 gap-7 md:gap-12 lg:gap-16 items-center"
     >
-      {/* Photograph column (always first on mobile; alternates on desktop) */}
       <div
-        className={`md:col-span-6 ${
-          reverse ? 'md:order-2' : 'md:order-1'
-        }`}
+        className={`md:col-span-6 ${reverse ? 'md:order-2' : 'md:order-1'
+          }`}
       >
         <PhotoFrame
           photo={photo}
           variant="story"
           showCaption={false}
+          coupleInitials={coupleInitials}
           onSelect={onSelectPhoto}
         />
       </div>
 
-      {/* Editorial text column */}
       <div
-        className={`md:col-span-6 flex flex-col ${
-          reverse ? 'md:order-1 md:pr-4' : 'md:order-2 md:pl-4'
-        }`}
+        className={`md:col-span-6 flex flex-col ${reverse ? 'md:order-1 md:pr-4' : 'md:order-2 md:pl-4'
+          }`}
       >
         <div className="flex items-center gap-3 mb-3.5 text-xs tracking-[0.24em] uppercase text-[#6D1025]/75 tabular-nums">
           <span>Chapter {chapter.sequence}</span>

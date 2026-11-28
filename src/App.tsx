@@ -1,50 +1,44 @@
-import { useState } from 'react';
-import { MotionConfig } from 'motion/react';
-import {
-  DEFAULT_LETTER,
-  DEFAULT_LOVE_NOTES,
-  PHOTO_MEMORIES,
-} from './config/anniversary';
-import { ScrollProgress } from './components/ScrollProgress';
-import { LoadingScreen } from './components/LoadingScreen';
-import { AnniversaryHero } from './components/AnniversaryHero';
-import { StorySection } from './components/StorySection';
-import { PhotoGallery } from './components/PhotoGallery';
-import { VideoGallery } from './components/VideoGallery';
-import { LoveNotes } from './components/LoveNotes';
-import { AnniversaryLetter } from './components/AnniversaryLetter';
-import { FinalMessage } from './components/FinalMessage';
-import { Lightbox } from './components/Lightbox';
+import { useEffect, useState } from 'react';
+import { ConfigProvider, useWebsiteConfig } from './context/ConfigContext';
+import { PublicWebsite } from './components/PublicWebsite';
+import { EditDashboard } from './components/editor/EditDashboard';
+
+function isEditPathname(pathname: string): boolean {
+  const normalized = pathname.replace(/\/+$/, '') || '/';
+  return normalized === '/edit';
+}
+
+function AppRoutes() {
+  const { savedConfig } = useWebsiteConfig();
+  const [pathname, setPathname] = useState<string>(() => window.location.pathname);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setPathname(window.location.pathname);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const navigate = (to: string) => {
+    if (window.location.pathname !== to) {
+      window.history.pushState({}, '', to);
+      setPathname(to);
+      window.scrollTo({ top: 0 });
+    }
+  };
+
+  if (isEditPathname(pathname)) {
+    return <EditDashboard onNavigatePublic={() => navigate('/')} />;
+  }
+
+  return <PublicWebsite config={savedConfig} />;
+}
 
 export default function App() {
-  const [activeLightboxPhotoId, setActiveLightboxPhotoId] = useState<number | null>(
-    null,
-  );
-
   return (
-    <MotionConfig reducedMotion="user">
-      <div className="min-h-screen w-full bg-[#FFF8F2] text-[#310916]">
-        <LoadingScreen />
-        <ScrollProgress />
-
-        <main>
-          <AnniversaryHero />
-          <StorySection onSelectPhoto={setActiveLightboxPhotoId} />
-          <PhotoGallery onSelectPhoto={setActiveLightboxPhotoId} />
-          <VideoGallery />
-          <LoveNotes notes={DEFAULT_LOVE_NOTES} />
-          <AnniversaryLetter letter={DEFAULT_LETTER} />
-        </main>
-
-        <FinalMessage />
-
-        <Lightbox
-          photos={PHOTO_MEMORIES}
-          activePhotoId={activeLightboxPhotoId}
-          onClose={() => setActiveLightboxPhotoId(null)}
-          onChangePhoto={setActiveLightboxPhotoId}
-        />
-      </div>
-    </MotionConfig>
+    <ConfigProvider>
+      <AppRoutes />
+    </ConfigProvider>
   );
 }

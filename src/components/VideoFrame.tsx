@@ -15,9 +15,15 @@ export function VideoFrame({
 }: VideoFrameProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [status, setStatus] = useState<'idle' | 'ready' | 'placeholder'>('idle');
+  const [status, setStatus] = useState<'idle' | 'ready' | 'placeholder'>(
+    video.previewSupported === false || !video.src ? 'placeholder' : 'idle',
+  );
   const [isVisible, setIsVisible] = useState(false);
   const [aspectRatio, setAspectRatio] = useState<number>(9 / 14);
+
+  useEffect(() => {
+    setStatus(video.previewSupported === false || !video.src ? 'placeholder' : 'idle');
+  }, [video.src, video.previewSupported]);
 
   // Observe visibility to autoplay muted when visible and pause offscreen
   useEffect(() => {
